@@ -52,7 +52,7 @@ void setColor(int redValue, int greenValue, int blueValue) {
     redValue = maxAnalogValue - redValue;
     greenValue = maxAnalogValue - greenValue;
     blueValue = maxAnalogValue - blueValue;
-  }
+}
   
   analogWrite(redPin, redValue);
   analogWrite(greenPin, greenValue);
