@@ -21,5 +21,4 @@ Coding style is of utmost importance. You must have a perfectly clean code in or
 :camera: Picture of the setup:  
 TBA
 
-:film_projector: Video showcasing the functionality:  
-TBA
+:film_projector: [Video showcasing the functionality](https://youtu.be/ppG1x3_EFg4)   
