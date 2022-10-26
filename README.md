@@ -18,7 +18,9 @@ Use a separat potentiometer in controlling each of the color of the RGB led (Red
 :large_orange_diamond: Other details:  
 Coding style is of utmost importance. You must have a perfectly clean code in order to receive the maximum grade. Keep in mind that magic numbers are not accepted, although you might see them in the lab (as a trade-off for speed). Remember to be consistent in your style, check the style guide and the provided style document and  use correct spacing.  
 
-:camera: Picture of the setup:  
-TBA
+:camera: Picture of the setup:   
+   
+   
+<img src="./Homework/H1/Setup.jpeg" width=70% height=70%>
 
 :film_projector: [Video showcasing the functionality](https://youtu.be/ppG1x3_EFg4)   
