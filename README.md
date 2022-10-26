@@ -7,7 +7,7 @@
 * code 
 * image files & videos
 
-## Homework 1 - [RGB led control with 3 potentiometers](./Homework/H1.ino)
+## Homework 1 - [RGB led control with 3 potentiometers](./Homework/H1/H1.ino)
 ### Requirements
 :diamond_shape_with_a_dot_inside: Components:  
 RBG LED (1  minimum), potentiometers (3 minimum), resistors and wires (per logic);
