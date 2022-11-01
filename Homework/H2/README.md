@@ -1,4 +1,4 @@
-# Homework 2 - Crosswalk simulator: traffic lights for people and cars
+# Homework 2 - [Crosswalk simulator: traffic lights for people and cars](./H2.ino)
 ## Requirements
 :diamond_shape_with_a_dot_inside: Components:  
 5 LEDs, 1 button, 1 buzzer, resistors and wires (per logic)
