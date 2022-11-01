@@ -25,7 +25,7 @@ Pressing the button in any state other than state 1 should NOT yield any actions
 An important coding challenge present in this task is using <b> millis() </b> instead of  <b> delay()</b>.
 
 :camera: Picture of the setup:   
-TBA
+<img src="./Setup.jpeg" width=70% height=70%>
    
 
 :film_projector: Video showcasing the functionality:  
