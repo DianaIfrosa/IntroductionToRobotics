@@ -89,6 +89,7 @@ void loop() {
       state4();
     } else {
       previousTime = currentTime;
+      previousBlinkingTime = 0;
       state1();
     }
   }
