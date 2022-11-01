@@ -21,7 +21,7 @@ const unsigned int waitingTimeState1 = 8000;
 const unsigned int durationState2 = 3000;
 const unsigned int durationState3 = 8000;
 const unsigned int durationState4 = 4000;
-const unsigned int durationBlinkingLed = 350;
+const unsigned int durationBlinkingLed = 300;
 
 bool stateCarRedPin = LOW;
 bool stateCarYellowPin = LOW;
