@@ -12,7 +12,7 @@ const unsigned int buzzerTone = 600;
 const unsigned int higherBuzzerTone = 900;
 
 const unsigned int durationBuzzer = 600;
-const unsigned int fastDurationBuzzer = 300;
+const unsigned int fastDurationBuzzer = 350;
 
 unsigned int soundsEmitted = 0;
 unsigned long previousBuzzerTime = 0;
@@ -21,7 +21,7 @@ const unsigned int waitingTimeState1 = 8000;
 const unsigned int durationState2 = 3000;
 const unsigned int durationState3 = 8000;
 const unsigned int durationState4 = 4000;
-const unsigned int durationBlinkingLed = 300;
+const unsigned int durationBlinkingLed = 350;
 
 bool stateCarRedPin = LOW;
 bool stateCarYellowPin = LOW;
@@ -32,11 +32,11 @@ bool statePedestrianGreenPin = LOW;
 
 unsigned int currentStateNo = 0;
 
-unsigned long lastDebounceTime = 0;
 const unsigned int debounceDelay = 50;
+unsigned long lastDebounceTime = 0;
 unsigned long currentTime = 0;
 unsigned long previousTime = 0;
-unsigned int previousBlinkingTime = 0;
+unsigned long previousBlinkingTime = 0;
 
 byte buttonState = HIGH;  // not pressed
 byte buttonStateRead = HIGH;
@@ -89,7 +89,6 @@ void loop() {
       state4();
     } else {
       previousTime = currentTime;
-      previousBlinkingTime = 0;
       state1();
     }
   }
@@ -123,7 +122,7 @@ void state2() {
 
 void buzzerState3() {
   currentTime = millis();
-  
+
   if (previousBuzzerTime / durationBuzzer != currentTime / durationBuzzer) {
     previousBuzzerTime = currentTime;
     soundsEmitted = soundsEmitted + 1;
@@ -153,7 +152,7 @@ void state3() {
 
 void buzzerState4() {
   currentTime = millis();
-  
+
   if (previousBuzzerTime / fastDurationBuzzer != currentTime / fastDurationBuzzer) {
     previousBuzzerTime = currentTime;
     soundsEmitted = soundsEmitted + 1;
