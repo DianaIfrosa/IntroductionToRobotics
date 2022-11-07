@@ -9,5 +9,6 @@
 
 # Homework:
 :pen: [RGB led control with 3 potentiometers](./Homework/H1)  
-:pencil2: [Crosswalk simulator: traffic lights for people and cars](./Homework/H2)
+:pencil2: [Crosswalk simulator: traffic lights for people and cars](./Homework/H2)  
+:fountain_pen: [Control the segments on a 7-segment display with joystick](./Homework/H3)  
 
