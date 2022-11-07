@@ -1,4 +1,4 @@
-# Homework 3 - [Control the segments on a 7-segment display](./H3.ino)
+# Homework 3 - [Control the segments on a 7-segment display with joystick](./H3.ino)
 ## Requirements
 :diamond_shape_with_a_dot_inside: Components:  
 1 7-segment display, 1 joystick, resistors and wires (per logic)  
