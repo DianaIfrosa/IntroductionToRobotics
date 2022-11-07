@@ -22,5 +22,5 @@ Magic numbers are not accepted and consistentency in style is desired.
    
 <img src="./Setup.jpeg" width=70% height=70%>
 
-:film_projector: Video showcasing the functionality:  
-TBA
+:film_projector: [Video showcasing the functionality](https://youtu.be/UeGWgw5SaV0)   
+
