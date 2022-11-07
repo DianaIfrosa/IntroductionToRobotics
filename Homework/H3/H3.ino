@@ -27,7 +27,7 @@ int yValue = 500;
 
 unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
-const long interval = 300;  // interval at which to blink (milliseconds)
+const long interval = 500;  // interval at which to blink (milliseconds)
 unsigned long lastDebounceTime = 0;
 const unsigned long shortDebounceDelay = 50;
 const unsigned long longdebounceDelay = 1000;
@@ -137,9 +137,10 @@ void state1() {
 }
 
 void blinkCurrentSegment() {
+  digitalWrite(segmentsInfo[currentPosition][0], blinkingState);
+  
   if (previousMillis / interval != currentMillis / interval) {
     previousMillis = currentMillis;
-    digitalWrite(segmentsInfo[currentPosition][0], blinkingState);
     blinkingState = !blinkingState;
   }
 }
@@ -230,7 +231,10 @@ void checkSwState2() {
 void displaySegments() {
   for (int i = 1; i < totalSegments + 1; i++)
     if (segmentsInfo[i][0] != -1) {  // valid segment
-      digitalWrite(segmentsInfo[i][0], segmentsState[i]);
+      if (noState == 1 && i == currentPosition) // keep the current segment blinking in state 1
+          continue;
+      else
+        digitalWrite(segmentsInfo[i][0], segmentsState[i]);
     }
 }
 
