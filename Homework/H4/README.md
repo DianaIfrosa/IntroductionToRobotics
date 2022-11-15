@@ -18,13 +18,18 @@ the 4 digits. Instead, using the other axis, the number on the current digit can
 to F). Pressing the button again returns to the
 previous state.
 
+**Pins**:  
+<img src="./Pins1.png" width=50% height=50%>
+<img src="./Pins2.png" width=20% height=20%>
+
+
 :large_orange_diamond: Other details:  
 When changing the number, the increment must be done for each joystick movement - it should not continuosly increment if the joystick is kept in one position.  
 Coding style is of utmost importance.  
 Magic numbers are not accepted and consistentency in style is desired.   
 
 :camera: Picture of the setup:     
-TBA 
+<img src="./Setup.jpeg" width=70% height=70%>
 
 :film_projector: Video showcasing the functionality:  
 TBA
