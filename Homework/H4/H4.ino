@@ -90,7 +90,6 @@ void setup() {
     digitalWrite(displayDigits[i], HIGH);
   }
 
-  Serial.begin(9600);
   noState = 1;
 }
 
