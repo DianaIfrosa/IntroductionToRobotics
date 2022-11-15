@@ -14,6 +14,9 @@ The system has the following states:
 selection (ON or OFF). Toggling the Y axis should change the segment state from ON to OFF or from OFF to ON.
 Clicking the joystick should save the segment state and exit back to state 1.
 
+**Movements**:  
+<img src="./Movements.png" width=40% height=40%>
+
 :large_orange_diamond: Other details:  
 Coding style is of utmost importance.  
 Magic numbers are not accepted and consistentency in style is desired.   
