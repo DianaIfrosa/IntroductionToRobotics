@@ -52,7 +52,7 @@ unsigned long previousMillis = 0;
 const long interval = 500;  // interval at which to blink (milliseconds)
 unsigned long lastDebounceTime = 0;
 const unsigned long shortDebounceDelay = 50;
-const unsigned long longdebounceDelay = 1000;
+const unsigned long longDebounceDelay = 1000;
 
 int shortPress = -1;  // -1 = N/A, 0 = didn't occur, 1 = did occur
 int longPress = -1;   // -1 = N/A, 0 = didn't occur, 1 = did occur
@@ -226,7 +226,7 @@ void checkSwState() {
   if (noState == 1) {
     currentMillis = millis();
 
-    if (currentMillis - lastDebounceTime > longdebounceDelay) {  //check for long press
+    if (currentMillis - lastDebounceTime > longDebounceDelay) {  //check for long press
       if (reading == swState && shortPress == 1) {
         if (swState == LOW) {
           longPress = 1;
