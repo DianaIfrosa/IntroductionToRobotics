@@ -29,7 +29,7 @@ struct point {
 };
 
 point tail;
-Queue<point> snakeBody = Queue<point>(15);  // TODO: choose a different data structure
+Queue<point> snakeBody = Queue<point>(12);  // TODO: choose a different data structure
 
 point snakeHead = { 0, 0 };
 point food = { 0, 0 };
@@ -37,11 +37,13 @@ point food = { 0, 0 };
 unsigned long lastMoved = 0;
 unsigned long gameStart = 0;
 const byte moveInterval = 250;
+const byte joystickInterval = 50;
 unsigned long previousMillisGame = 0;
+unsigned long previousMillisJs = 0;
 
 const byte initialLevel = 1;
 const byte initialScore = 0;
-const byte initialLives = 1;  //TODO CHANGE TO 2
+const byte initialLives = 2;
 
 byte difficulty = 0;  // 0 - LOW, 1 - MEDIUM, 2 - HIGH
 byte level;
@@ -50,7 +52,6 @@ byte lives;
 
 const byte difficultyPoints[] = { 1, 2, 4 };  // points (per level) added to score for each degree of difficulty
 bool foodEaten = false;
-// TODO: add a queue with joystick movements, or find a way to catch more joystick movements
 
 void generateFood() {
   // TODO: make the food blink
@@ -184,18 +185,29 @@ void restartGame(byte levelValue, byte scoreValue, byte livesValue) {
   }
 
   generateFood();
+  previousMillisGame = 0;
+  previousMillisJs = 0;
   gameStart = millis();
 }
 
 void game() {
   static byte status = 0;
+  oldJoystickMovement = joystickMovement;
 
   currentMillis = millis();
 
+  if (previousMillisJs / joystickInterval != (currentMillis - gameStart) / joystickInterval) {
+    previousMillisJs = currentMillis - gameStart;
+    checkJoystick();
+
+    if (!(joystickMovement != oldJoystickMovement && joystickMovement != NONE))  // get first movement different than NONE for the joystick
+      joystickMovement = oldJoystickMovement;
+  }
+
   if (previousMillisGame / moveInterval != (currentMillis - gameStart) / moveInterval) {
     previousMillisGame = currentMillis - gameStart;
-    checkJoystick();
     moveSnakeHead();
+    joystickMovement = NONE;
     status = getSnakeStatus();
     if (status == 0) {  // nothing happened
       updateSnake();
@@ -271,20 +283,21 @@ void updateHighscoreList() {
   byte highscore, pos, i;
 
   for (pos = 5; pos >= 1; pos--) {
+    Serial.println(pos);
     highscore = getHighscoreValue(pos);
-    if (score > highscore)
-      continue;
-    else break;
+    Serial.println(highscore);
+    if (score <= highscore) {
+      break;
+    }
   }
-  pos--;
-  
+  pos++;
+
   // shift the other highscores
   for (i = noHighscores - 1; i >= pos; i--) {
     writeHighscore(i + 1, getHighscoreValue(i), getHighscoreName(i));
-  } 
+  }
 
-  writeHighscore(pos, score, nameIntroduced);      
-  Serial.println("Done");
+  writeHighscore(pos, score, nameIntroduced);
 }
 
 void enterName() {
@@ -318,7 +331,12 @@ void resetHighscore() {
   for (byte i = 1; i <= noHighscores; i++) {
     writeHighscore(i, 0, "NONE ");
   }
+
+  // EEPROM.update(0, 0);
+  // EEPROM.update(1, 0);
+  // EEPROM.update(2, 0);
 }
+
 
 void gameSetup() {
   // TODO: add a new button (or 2) as INPUT PULLUP
