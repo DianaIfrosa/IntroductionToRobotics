@@ -15,8 +15,8 @@ int yValue = 500;
 
 unsigned long currentMillis = 0;
 unsigned long lastDebounceTime = 0;
-const byte shortDebounceDelay = 50;
-const unsigned short longDebounceDelay = 1000;
+const byte shortDebounceDelay = 30;
+const unsigned short longDebounceDelay = 2000;
 
 enum jsMovement { NONE,
                   UP,
@@ -25,7 +25,9 @@ enum jsMovement { NONE,
                   LEFT,
                   SHORT_PRESS,
                   LONG_PRESS };
+
 jsMovement joystickMovement = NONE;
+jsMovement oldJoystickMovement;
 
 byte shortPress = -1;  // -1 = N/A, 0 = didn't occur, 1 = did occur
 byte longPress = -1;   // -1 = N/A, 0 = didn't occur, 1 = did occur
@@ -70,7 +72,7 @@ void checkJoystick() {
 
   currentMillis = millis();
 
-  if (currentMillis - lastDebounceTime > shortDebounceDelay) {  //check for short press
+  if (currentMillis - lastDebounceTime > shortDebounceDelay) {  // check for short press
     if (reading != swState) {
       swState = reading;
       if (swState == LOW) {
@@ -80,7 +82,7 @@ void checkJoystick() {
   }
 
   currentMillis = millis();
-  if (currentMillis - lastDebounceTime > longDebounceDelay) {  //check for long press
+  if (currentMillis - lastDebounceTime > longDebounceDelay) {  // check for long press
     if (reading == swState && shortPress == 1) {
       if (swState == LOW) {
         longPress = 1;
@@ -105,5 +107,5 @@ void checkJoystick() {
 }
 
 void joystickSetup() {
-  pinMode(pinSW, INPUT_PULLUP);  // TODO delete if nothing else has to be done
+  pinMode(pinSW, INPUT_PULLUP);  // TODO: delete if nothing else has to be done
 }
