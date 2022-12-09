@@ -1,4 +1,4 @@
-//TODO : add consts for memory positions
+// TODO : add consts for eeprom memory positions if memory is enough
 #include <EEPROM.h>
 const byte highscoreStartPosition = 3;
 const byte noLettersHighscore = 5;
@@ -6,15 +6,15 @@ const byte lengthHighscorePair = 7;
 const byte noHighscores = 5;
 
 String readStringFromMemory(byte addrOffset) {
-  int newStrLen = EEPROM.read(addrOffset);
+  byte newStrLen = EEPROM.read(addrOffset);
   byte i;
-  char data[newStrLen + 1];
+  char text[newStrLen + 1];
   for (i = 0; i < newStrLen; i++) {
-    data[i] = EEPROM.read(addrOffset + 1 + i);
+    text[i] = EEPROM.read(addrOffset + 1 + i);
   }
 
-  data[newStrLen] = '\0';
-  return String(data);
+  text[newStrLen] = '\0';
+  return String(text);
 }
 
 void writeStringToMemory(byte addrOffset, const String &text) {
@@ -40,9 +40,13 @@ String getHighscoreName(byte no) {
 void writeHighscore(byte no, byte score, String name) {
   byte position = highscoreStartPosition + (noHighscores - no) * lengthHighscorePair;
   writeStringToMemory(position, name);
-  
+
   position += noLettersHighscore + 1;
   EEPROM.update(position, score);
 }
 
-
+void resetSettingsMemory() {
+  EEPROM.update(0, 0);
+  EEPROM.update(1, 0);
+  EEPROM.update(2, 0);
+}
