@@ -1,4 +1,4 @@
-# Homework 5 - [Menu + mini game (Snake)](./H5.ino)
+# Homework 5 - [Menu + mini game (Snake)](./Game)
 ## Requirements
 :diamond_shape_with_a_dot_inside: Main components:  
 A joystick, a MAX7219 Driver, a 8x8 LED matrix, a LCD display, a buzzer, a potentiometer to control the contrast of LCD
