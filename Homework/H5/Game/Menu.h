@@ -1,7 +1,5 @@
 #include "Snake.h"
 
-// const String initialMessage = "Hello!";
-
 unsigned long previousMillis = 0;
 unsigned long submenuStartMillis = 0;
 
@@ -21,7 +19,8 @@ void play() {
 
 void highscore() {
   static byte position = 0;
-  
+
+  // it will be displayed a top 5 players with name and score, and the last option would be to reset the highscore (press is required)
   displayHighscoreList(position + 1);
   checkJoystick();
 
@@ -29,20 +28,20 @@ void highscore() {
     gameState = MAIN_MENU;
     menuSound();
     lcd.clear();
-  } else {
-    if (joystickMovement == UP && position > 0) {
-      position--;
-      menuSound();
-      lcd.clear();
-    }
-
-    if (joystickMovement == DOWN && position < noHighscores - 1) {
-      position++;
-      menuSound();
-      lcd.clear();
-    }
+  } else if (joystickMovement == UP && position > 0) {
+    position--;
+    menuSound();
+    lcd.clear();
+  } else if (joystickMovement == DOWN && position < noHighscores) {
+    position++;
+    menuSound();
+    lcd.clear();
+  } else if (joystickMovement == SHORT_PRESS && position == noHighscores) {
+    menuSound();
+    lcd.clear();
+    resetHighscore();
+    gameState = MAIN_MENU;
   }
-
 }
 
 void about() {
@@ -71,6 +70,7 @@ void about() {
 }
 
 void howToPlay() {
+  // TODO: implement floating text as in the 'About section'
   static byte instructionsPosition = 0;
   checkJoystick();
 
@@ -120,7 +120,7 @@ void setLCDBrightness() {
   displayBrightness(LCDBrightness, ARRAY_SIZE(LCDBrightValues));
 
   checkJoystick();
-  if (joystickMovement == UP) {  // up
+  if (joystickMovement == UP) { 
     if (LCDBrightness < ARRAY_SIZE(LCDBrightValues) - 1) {
       LCDBrightness += 1;
       menuSound();
@@ -128,7 +128,7 @@ void setLCDBrightness() {
       updateBrightnessDisplay(LCDBrightness);
     }
 
-  } else if (joystickMovement == DOWN) {  // down
+  } else if (joystickMovement == DOWN) {
     if (LCDBrightness > 0) {
       LCDBrightness -= 1;
       menuSound();
@@ -154,7 +154,7 @@ void setMatrixBrightness() {
   displayBrightness(matrixBrightness, ARRAY_SIZE(matrixBrightValues));
 
   checkJoystick();
-  if (joystickMovement == UP) {  // up
+  if (joystickMovement == UP) {
     if (matrixBrightness < ARRAY_SIZE(matrixBrightValues) - 1) {
       matrixBrightness += 1;
       menuSound();
@@ -162,7 +162,7 @@ void setMatrixBrightness() {
       updateBrightnessDisplay(matrixBrightness);
     }
 
-  } else if (joystickMovement == DOWN) {  // down
+  } else if (joystickMovement == DOWN) { 
     if (matrixBrightness > 0) {
       matrixBrightness -= 1;
       menuSound();
@@ -206,7 +206,7 @@ void openSettingsOption() {
       setMatrixBrightness();
       break;
     case 3:
-      displaySound(muted);  //TODO take from eeprom
+      displaySound(muted);
       setSound();
       break;
   }
