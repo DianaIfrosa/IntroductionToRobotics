@@ -13,5 +13,5 @@ and that along with the score will be stored in the highscore list, available in
     
 <img src="./Setup.jpeg" width=70% height=70%>
 
-:film_projector: [Video showcasing the functionality](https://youtu.be/miAosIzcM9Y)
+:film_projector: [Video showcasing the functionality](https://youtu.be/jDs8ssV0v28)
 
