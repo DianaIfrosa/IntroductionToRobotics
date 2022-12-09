@@ -53,5 +53,3 @@ void loadSavedValues() {
   EEPROM.get(1, matrixBrightness);
   EEPROM.get(2, muted);  
 }
-
-
