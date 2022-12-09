@@ -10,7 +10,7 @@ different categories to customize, such as "Difficulty", "LCD brightness", "MTR 
 and that along with the score will be stored in the highscore list, available in the main menu.
 
 :camera: Picture of the setup:  
-TBA
+<img src="./Setup.jpeg" width=70% height=70%>
 
 :film_projector: [Video showcasing the functionality](https://youtu.be/miAosIzcM9Y)
 
