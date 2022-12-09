@@ -3,7 +3,7 @@
 #include "Joystick.h"
 #include "Matrix.h"
 #include "Buzzer.h"
-#include "Queue.h"  // open-source code
+#include <ArduinoQueue.h>
 
 enum state { GREETING,
              MAIN_MENU,
@@ -24,12 +24,12 @@ enum direction { HORIZONTAL_LEFT,
 direction snakeDirection = HORIZONTAL_RIGHT;
 
 struct point {
-  short x;
-  short y;
+  byte x;
+  byte y;
 };
 
 point tail;
-Queue<point> snakeBody = Queue<point>(12);  // TODO: choose a different data structure
+ArduinoQueue<point> snakeBody(5 * matrixSize);
 
 point snakeHead = { 0, 0 };
 point food = { 0, 0 };
@@ -53,21 +53,17 @@ byte lives;
 const byte difficultyPoints[] = { 1, 2, 4 };  // points (per level) added to score for each degree of difficulty
 bool foodEaten = false;
 
-void generateFood() {
-  // TODO: make the food blink
+byte ct = 0;
 
+void generateFood() {
+
+  // TODO: make the food blink
   food.x = random(0, matrixSize);
   food.y = random(0, matrixSize);
 
-  if (matrix[food.x][food.y] != 0) {
-    food.x++;
-    if (food.x > matrixSize - 1) {
-      food.x = 0;
-    }
-    food.y++;
-    if (food.y > matrixSize - 1) {
-      food.y = 0;
-    }
+  while (matrix[food.x][food.y] != 0) {
+    food.x = random(0, matrixSize);
+    food.y = random(0, matrixSize);
   }
 
   matrix[food.x][food.y] = 3;
@@ -80,53 +76,65 @@ void moveSnakeHead() {
   if (snakeDirection == HORIZONTAL_LEFT || snakeDirection == HORIZONTAL_RIGHT) {
     if (joystickMovement == UP) {
       snakeDirection = VERTICAL_UP;
-      snakeHead.y--;
+
+      if (snakeHead.y > 0)
+        snakeHead.y--;
+      else
+        snakeHead.y = matrixSize - 1;
+
     } else if (joystickMovement == DOWN) {
       snakeDirection = VERTICAL_DOWN;
-      snakeHead.y++;
-    } else {  //moving normally
+      if (snakeHead.y < matrixSize - 1)
+        snakeHead.y++;
+      else snakeHead.y = 0;
+    } else {  // moving normally
       if (snakeDirection == HORIZONTAL_LEFT) {
-        snakeHead.x--;
+        if (snakeHead.x > 0)
+          snakeHead.x--;
+        else
+          snakeHead.x = matrixSize - 1;
       } else {
-        snakeHead.x++;
+        if (snakeHead.x < matrixSize - 1)
+          snakeHead.x++;
+        else snakeHead.x = 0;
       }
     }
   } else if (snakeDirection == VERTICAL_UP || snakeDirection == VERTICAL_DOWN) {
     if (joystickMovement == RIGHT) {
       snakeDirection = HORIZONTAL_RIGHT;
-      snakeHead.x++;
+      if (snakeHead.x < matrixSize - 1)
+        snakeHead.x++;
+      else snakeHead.x = 0;
     } else if (joystickMovement == LEFT) {
       snakeDirection = HORIZONTAL_LEFT;
-      snakeHead.x--;
-    } else {  //moving normally
+      if (snakeHead.x > 0)
+        snakeHead.x--;
+      else
+        snakeHead.x = matrixSize - 1;
+    } else {  // moving normally
       if (snakeDirection == VERTICAL_UP) {
-        snakeHead.y--;
+        if (snakeHead.y > 0)
+          snakeHead.y--;
+        else
+          snakeHead.y = matrixSize - 1;
       } else {
-        snakeHead.y++;
+        if (snakeHead.y < matrixSize - 1)
+          snakeHead.y++;
+        else snakeHead.y = 0;
       }
     }
-  }
-
-  // go through walls
-  // TODO: add level high modifications
-  if (snakeHead.x > matrixSize - 1) {
-    snakeHead.x = 0;
-  } else if (snakeHead.x < 0) {
-    snakeHead.x = matrixSize - 1;
-  } else if (snakeHead.y > matrixSize - 1) {
-    snakeHead.y = 0;
-  } else if (snakeHead.y < 0) {
-    snakeHead.y = matrixSize - 1;
   }
 }
 
 void updateSnake() {
   matrix[snakeHead.x][snakeHead.y] = 2;
-  snakeBody.push({ snakeHead.x, snakeHead.y });
+
+  snakeBody.enqueue({ snakeHead.x, snakeHead.y });
+
   lc.setLed(0, snakeHead.x, snakeHead.y, true);
 
   if (foodEaten == false) {
-    tail = snakeBody.pop();
+    tail = snakeBody.dequeue();
 
     matrix[tail.x][tail.y] = 0;
     lc.setLed(0, tail.x, tail.y, false);
@@ -163,10 +171,12 @@ void restartGame(byte levelValue, byte scoreValue, byte livesValue) {
   xSnakeTail = 0;
   ySnakeTail = 3;
 
-  snakeBody.clear();
+  while (!snakeBody.isEmpty()) {
+    snakeBody.dequeue();
+  }
 
-  snakeBody.push({ xSnakeTail, ySnakeTail });
-  snakeBody.push({ snakeHead.x, snakeHead.y });
+  snakeBody.enqueue({ xSnakeTail, ySnakeTail });
+  snakeBody.enqueue({ snakeHead.x, snakeHead.y });
 
   snakeDirection = HORIZONTAL_RIGHT;
 
@@ -185,6 +195,8 @@ void restartGame(byte levelValue, byte scoreValue, byte livesValue) {
   }
 
   generateFood();
+  foodEaten = false;
+
   previousMillisGame = 0;
   previousMillisJs = 0;
   gameStart = millis();
@@ -206,6 +218,7 @@ void game() {
 
   if (previousMillisGame / moveInterval != (currentMillis - gameStart) / moveInterval) {
     previousMillisGame = currentMillis - gameStart;
+
     moveSnakeHead();
     joystickMovement = NONE;
     status = getSnakeStatus();
@@ -213,6 +226,7 @@ void game() {
       updateSnake();
 
     } else if (status == 1) {  // ate food
+
       foodEaten = true;
       updateSnake();
       eatSound();
@@ -283,9 +297,7 @@ void updateHighscoreList() {
   byte highscore, pos, i;
 
   for (pos = 5; pos >= 1; pos--) {
-    Serial.println(pos);
     highscore = getHighscoreValue(pos);
-    Serial.println(highscore);
     if (score <= highscore) {
       break;
     }
@@ -312,11 +324,22 @@ void enterName() {
     letter++;
     displayEnterName(letter);
 
-  } else if (joystickMovement == UP && nameIntroduced[letter] < 'Z') {
-    nameIntroduced[letter]++;
+  } else if (joystickMovement == UP) {
+
+    if (nameIntroduced[letter] == 'Z') {
+      nameIntroduced[letter] = 'A';
+    } else {
+      nameIntroduced[letter]++;
+    }
     updateEnterName();
-  } else if (joystickMovement == DOWN && nameIntroduced[letter] > 'A') {
-    nameIntroduced[letter]--;
+  } else if (joystickMovement == DOWN) {
+
+    if (nameIntroduced[letter] == 'A') {
+      nameIntroduced[letter] = 'Z';
+    } else {
+      nameIntroduced[letter]--;
+    }
+
     updateEnterName();
   } else if (joystickMovement == SHORT_PRESS) {
     updateHighscoreList();
@@ -331,12 +354,7 @@ void resetHighscore() {
   for (byte i = 1; i <= noHighscores; i++) {
     writeHighscore(i, 0, "NONE ");
   }
-
-  // EEPROM.update(0, 0);
-  // EEPROM.update(1, 0);
-  // EEPROM.update(2, 0);
 }
-
 
 void gameSetup() {
   // TODO: add a new button (or 2) as INPUT PULLUP
